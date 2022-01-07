@@ -7,18 +7,57 @@ public class GamePiece : ScriptableObject
     public uint width, height;
     public int num;
     public Sprite sprite;
-    
+
+    private int id = -1;
     private bool[,] _pieceMatrix = null;
 
+    public GameObject CreateInstance(Vector2Int boardPos, Vector3 offset, int level = 0)
+    {
+        GameObject pieceObject = new GameObject();
+        pieceObject.transform.position = new Vector3(boardPos.x, -boardPos.y, level) + offset + new Vector3(width/2.0f, -height/2.0f);
+        pieceObject.name = name;
+        pieceObject.AddComponent<SpriteRenderer>().sprite = sprite;
+        pieceObject.GetComponent<SpriteRenderer>().sortingOrder = level;
+        pieceObject.AddComponent<GamePieceObject>().piece = this; // change later
+        pieceObject.GetComponent<GamePieceObject>().active = false; // change later
+        return pieceObject;
+    }
+    
     public bool[,] GetMatrix()
     {
         if (_pieceMatrix == null)
             _pieceMatrix = ConstructMatrix();
-
-        Debug.Log(GetMatrixString());
         return _pieceMatrix;
     }
 
+    public void RotateCounterClockwise()
+    {
+        int N = _pieceMatrix.GetLength(0);
+        int M = _pieceMatrix.GetLength(1);
+
+        bool[,] newMat = new bool[M, N];
+
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < M; j++)
+                newMat[M - j - 1, i] = _pieceMatrix[i, j];
+        _pieceMatrix = newMat;
+    }
+    public void RotateClockwise()
+    {
+        int N = _pieceMatrix.GetLength(0); // height
+        int M = _pieceMatrix.GetLength(1); // width
+
+        height = (uint) M;
+        width = (uint) N;
+
+        bool[,] newMat = new bool[M, N];
+
+        for (int i = 0; i < N; i++)
+            for (int j = 0; j < M; j++)
+                newMat[j, N - i - 1] = _pieceMatrix[i, j];
+        
+        _pieceMatrix = newMat;
+    }
 
     private bool[,] ConstructMatrix()
     {
@@ -71,8 +110,9 @@ public class GamePiece : ScriptableObject
     }
     public string GetMatrixString()
     {
+        
         string str = "";
-        bool[,] matrix = _pieceMatrix;
+        bool[,] matrix = GetMatrix();
 
         for (int i = 0; i < matrix.GetLength(0); i++)
         {
