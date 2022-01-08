@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c5bb84fd5a94554eaccc030af6c6ca1, type: 3}
-  m_Name: 8
+  m_Script: {fileID: 11500000, guid: b834f7d3524861d4f9f958d88a029e30, type: 3}
+  m_Name: 4
   m_EditorClassIdentifier: 
   width: 3
   height: 4
-  num: 8
-  sprite: {fileID: 7299954530389926937, guid: 2fc943e4c02396f438e70c524edbe283, type: 3}
+  value: 4
+  sprite: {fileID: 4256331179894988467, guid: 2fc943e4c02396f438e70c524edbe283, type: 3}

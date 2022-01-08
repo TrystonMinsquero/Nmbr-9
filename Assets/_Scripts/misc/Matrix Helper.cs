@@ -1,18 +1,32 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class MatrixHelper : MonoBehaviour
+public static class MatrixHelper
 {
-    // Start is called before the first frame update
-    void Start()
+    public static string GetStringMatrix(bool[,] matrix)
     {
-        
+        string str = "";
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrix.GetLength(1); j++)
+                str += matrix[i, j] ? "1 ": "0 ";
+            str += "\n";
+        }
+        return str;
     }
+    
+    public static string GetStringMatrix(GamePiece[,] matrix)
+    {
+        int pad = 5;
+        string str = "";
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        for (int i = 0; i < matrix.GetLength(0); i++)
+        {
+            for (int j = 0; j < matrix.GetLength(1); j++)
+            {
+                str += matrix[i, j] != null ? (matrix[i,j].Value).ToString().PadRight(pad): "X".PadRight(pad);
+            }
+            str += "\n";
+        }
+        return str;
     }
+    
+   
 }
