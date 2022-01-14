@@ -47,7 +47,7 @@ public class Board
         if (!IsInBounds(piece, boardPos))
         {
             Debug.LogWarning("Piece out of Bounds");
-            DisplayWithPiece(piece, boardPos);
+            // DisplayWithPiece(piece, boardPos);
             return false;
         }
 
@@ -56,7 +56,7 @@ public class Board
         if (!levels[level].IsConnectedAdjacently(piece, boardPos))
         {
             Debug.LogWarning("Must be adjacent other pieces on this level (level " + level + ")");
-            DisplayWithPiece(piece, boardPos);
+            // DisplayWithPiece(piece, boardPos);
             return false;
         }
 
@@ -65,20 +65,20 @@ public class Board
             if (levels[level].IsHanging(piece, boardPos, levels[level - 1]))
             {
                 Debug.LogWarning("Can't place on air squares");
-                DisplayWithPiece(piece, boardPos);
+                // DisplayWithPiece(piece, boardPos);
                 return false;
             }
 
             if (!levels[level].IsOnTwoOrMorePieces(piece, boardPos, levels[level - 1]))
             {
                 Debug.LogWarning("Must be placed on two unique pieces");
-                DisplayWithPiece(piece, boardPos);
+                // DisplayWithPiece(piece, boardPos);
                 return false;
             }
         }
 
         PlacePiece(piece, boardPos, level);
-        Display();
+        // Display();
         return true;
     }
 

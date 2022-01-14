@@ -45,7 +45,7 @@ public class Player
 
         ActivePosition = newPosition;
         
-        Debug.Log("Moved " + ActiveGamePiece.Value + " to " + ActivePosition);
+        // Debug.Log("Moved " + ActiveGamePiece.Value + " to " + ActivePosition);
         
     }
 
