@@ -1,14 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
-using Vector2 = UnityEngine.Vector2;
 
-[Serializable]
+[System.Serializable]
 public class Board
 {
-    private uint size { get; }
+    public uint size { get; }
     public List<Level> levels { get; }
     
     public Board(uint boardSize)
