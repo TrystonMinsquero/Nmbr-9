@@ -17,10 +17,13 @@ public class Level
         _size = size;
     }
 
-    public Level(GamePiece[,] levelMatrix)
+    public Level(Level level)
     {
-        _levelMatrix = levelMatrix;
+        _size = level._size;
+        _levelMatrix = MatrixHelper.GetMatrixCopy(level._levelMatrix);
         _piecesPlaced = new List<GamePiece>();
+        foreach (GamePiece piecePlaced in level._piecesPlaced)
+            _piecesPlaced.Add(new GamePiece(piecePlaced));
     }
     
     public void PlacePiece(GamePiece piece, Vector2Int boardPos)
@@ -34,6 +37,14 @@ public class Level
                     _levelMatrix[index.x + i, index.y + j] = piece;
         
         _piecesPlaced.Add(piece);
+    }
+
+    public int GetTotalScore()
+    {
+        int total = 0;
+        foreach (GamePiece piece in _piecesPlaced)
+            total += piece.Value;
+        return total;
     }
 
     #region Checks
@@ -77,13 +88,13 @@ public class Level
         if (index.x + 1 < _size && IsSpaceOccupied(index.x + 1, index.y))
             return true;
         // Check down
-        if (index.x - 1 > 0 && IsSpaceOccupied(index.x - 1, index.y))
+        if (index.x - 1 >= 0 && IsSpaceOccupied(index.x - 1, index.y))
             return true;
         // Check right
         if (index.y + 1 < _size && IsSpaceOccupied(index.x, index.y + 1))
             return true;
         // Check left
-        if (index.y - 1 > 0 && IsSpaceOccupied(index.x, index.y - 1))
+        if (index.y - 1 >= 0 && IsSpaceOccupied(index.x, index.y - 1))
             return true;
 
         return false;

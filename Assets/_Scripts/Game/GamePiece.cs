@@ -21,6 +21,16 @@ public class GamePiece
         ID = id;
     }
     
+    public GamePiece(GamePiece gamePiece)
+    {
+        Value = gamePiece.Value;
+        Sprite = gamePiece.Sprite;
+        PieceMatrix = MatrixHelper.GetMatrixCopy(gamePiece.PieceMatrix);
+        Height = gamePiece.Height;
+        Width = gamePiece.Width;
+        ID = gamePiece.ID;
+    }
+    
     // public GameObject CreateInstance(Vector2Int boardPos, Vector3 offset, int level = 0)
     // {
     //     GameObject pieceObject = new GameObject();

@@ -8,7 +8,7 @@ using Vector2 = UnityEngine.Vector2;
 [Serializable]
 public class Board
 {
-    public uint size { get; }
+    private uint size { get; }
     public List<Level> levels { get; }
     
     public Board(uint boardSize)
@@ -17,6 +17,14 @@ public class Board
         size = boardSize;
         levels.Add(new Level(size));
     }
+    public Board(Board board)
+    {
+        levels = new List<Level>();
+        foreach(Level level in board.levels)
+            levels.Add(new Level(level));
+        size = board.size;
+    }
+    
 
     private int GetLevelFromPosition(GamePiece piece, Vector2Int boardPos)
     {
@@ -39,6 +47,7 @@ public class Board
         if (!IsInBounds(piece, boardPos))
         {
             Debug.LogWarning("Piece out of Bounds");
+            DisplayWithPiece(piece, boardPos);
             return false;
         }
 
@@ -47,7 +56,7 @@ public class Board
         if (!levels[level].IsConnectedAdjacently(piece, boardPos))
         {
             Debug.LogWarning("Must be adjacent other pieces on this level (level " + level + ")");
-            Display();
+            DisplayWithPiece(piece, boardPos);
             return false;
         }
 
@@ -56,14 +65,14 @@ public class Board
             if (levels[level].IsHanging(piece, boardPos, levels[level - 1]))
             {
                 Debug.LogWarning("Can't place on air squares");
-                Display();
+                DisplayWithPiece(piece, boardPos);
                 return false;
             }
 
             if (!levels[level].IsOnTwoOrMorePieces(piece, boardPos, levels[level - 1]))
             {
                 Debug.LogWarning("Must be placed on two unique pieces");
-                Display();
+                DisplayWithPiece(piece, boardPos);
                 return false;
             }
         }
@@ -73,10 +82,10 @@ public class Board
         return true;
     }
 
-    private void PlacePiece(GamePiece piece, Vector2Int boardPos, int level)
+    private void PlacePiece(GamePiece piece, Vector2Int boardPos, int level = -1)
     {
         if (level < 0 || level >= levels.Count)
-            return;
+            level = GetLevelFromPosition(piece, boardPos);
         
         levels[level].PlacePiece(piece, boardPos);
         
@@ -112,6 +121,14 @@ public class Board
             level.Display(i);
             i++;
         }
+    }
+    
+    public void DisplayWithPiece(GamePiece gamePiece, Vector2Int boardPos)
+    {
+        Board tempBoard = new Board(this);
+        tempBoard.PlacePiece(gamePiece, boardPos);
+        Debug.Log("Board with " + gamePiece + " place at " + boardPos + ":");
+        tempBoard.Display();
     }
 
 

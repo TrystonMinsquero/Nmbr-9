@@ -18,19 +18,21 @@ public class Player
     public void StartTurn(GamePiece piece)
     {
         ActiveGamePiece = piece;
-        Vector2Int mid = Vector2Int.one * (int) (_board.size / 2);
-        Vector2Int offset = new Vector2Int((int) -ActiveGamePiece.Width / 2, (int) ActiveGamePiece.Height / 2);
-        ActivePosition = Vector2Int.zero;//mid + offset;
+        // Check for piece size
+        if (GameManager.instance.boardSize < piece.Height || GameManager.instance.boardSize < piece.Width)
+            throw new Exception($"Game board is not big enough for the {piece.Height} by {piece.Width} piece");
+        Vector2Int mid = Vector2Int.one * (int) (GameManager.instance.boardSize/ 2);
+        Vector2Int offset = new Vector2Int(-Mathf.CeilToInt(ActiveGamePiece.Width/ 2f), Mathf.CeilToInt(ActiveGamePiece.Height / 2f));
+        ActivePosition = mid;
     }
 
     public void Place()
     {
         if (_board.TryPlacePiece(ActiveGamePiece, ActivePosition))
         {
-            Debug.Log("Placed " + ActiveGamePiece.Value + " at " + ActivePosition);
-            //Display();
+            //Debug.Log("Placed " + ActiveGamePiece.Value + " at " + ActivePosition);
             ActiveGamePiece = null;
-        }
+        } 
         // else display message
         
     }
@@ -47,33 +49,30 @@ public class Player
         
     }
 
-    public void RotateCounterClockwise()
+    public int CalculateScore()
     {
-        ActiveGamePiece.RotateCounterClockwise();
-        ActivePosition += GetOffsetAfterRotate(ActiveGamePiece.Height, ActiveGamePiece.Width);
+        int total = 0;
+        for (int i = 0; i < _board.levels.Count; i++)
+            total += _board.levels[i].GetTotalScore() * i;
+        return total;
+    }
 
-    }
-    
-    private Vector2Int GetOffsetAfterRotate(uint height, uint width)
-    {
-        Vector2Int offset = Vector2Int.zero;
-        if (height == width)
-            return offset;
-        // This formula doesn't really work for larger matrices
-        float goldenRatio = (1 + Mathf.Sqrt(5)) / 2;
-        if ((float) Math.Max(height, width) / Math.Min(height, width) > goldenRatio)
-            offset.x += 1;
-        if(height != width)
-            offset.y += 1;
-        return height > width ? offset : -offset;
-    }
-    
-    public void Display()
+    public void DebugDisplay()
     {
         for (int i = 0; i < _board.levels.Count - 1; i++)
         {
             Debug.Log("Level " + i + ":");
             _board.levels[i].Display();
         }
+    }
+
+    public void DebugDisplayWithActivePiece()
+    {
+        _board.DisplayWithPiece(ActiveGamePiece, ActivePosition);
+    }
+    
+    public void DebugDisplayScore(string name)
+    {
+        Debug.Log($"{name}'s total score was {CalculateScore()}");
     }
 }

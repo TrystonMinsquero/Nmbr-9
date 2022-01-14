@@ -1,7 +1,5 @@
-using System.Numerics;
+using System;
 using UnityEngine;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class PieceDisplay : MonoBehaviour
@@ -9,7 +7,7 @@ public class PieceDisplay : MonoBehaviour
     private GamePiece _gamePiece;
     private SpriteRenderer _sr;
 
-    private Vector3 _offset;
+    private Vector3 _rotateOffset;
 
     private void Start()
     {
@@ -21,8 +19,8 @@ public class PieceDisplay : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _gamePiece = piece;
         _sr.sprite = piece.Sprite;
-        _offset = GetOffset();
-        transform.position = spawnPoint + _offset;
+        _rotateOffset = Vector3.zero;
+        transform.position = spawnPoint + new Vector3(-.5f, -.5f);
     }
     
     
@@ -34,28 +32,44 @@ public class PieceDisplay : MonoBehaviour
     public void RotateClockwise()
     {
         transform.eulerAngles -= Vector3.forward * 90;
-        transform.position -= _offset;
-        _offset = GetOffset();
-        transform.position += _offset;
-
-        // bool rotated = 
-        // pieceDisplay.transform.position.z = pieceDisplay.transform.eulerAngles.z % 180 == 0 ? 
+        
+        // Reset positional offset
+        transform.position -= SetRotateOffset();
+        transform.position += _rotateOffset;
     }
     
     public void RotateCounterClockwise()
     {
         transform.eulerAngles += Vector3.forward * 90;
-        transform.position -= _offset;
-        _offset = GetOffset();
-        transform.position += _offset;
+        
+        // Reset positional offset
+        transform.position -= SetRotateOffset();
+        transform.position += _rotateOffset;
     }
 
-    private Vector2 GetOffset()
+    // Sets _offset to the correct Vector2, but returns the old offset
+    private Vector3 SetRotateOffset()
     {
-        
-        Vector2 offset;
-        offset.x = _gamePiece.Width % 2 == 0 ? .5f : 0;
-        offset.y = _gamePiece.Height % 2 == 0 ? .5f : 0;
-        return offset;
+        Vector2 oldOffset = _rotateOffset;
+        switch (Mathf.RoundToInt(transform.eulerAngles.z))
+        {
+            // normal
+            case 0: _rotateOffset = Vector2.zero;
+                break;
+            // counter once
+            case 90: _rotateOffset = new Vector2(0, -_gamePiece.Height);
+                break;
+            // clockwise once
+            case 270:
+            case -90: _rotateOffset = new Vector2(_gamePiece.Width, 0);
+                break;
+            // inverted
+            case 180:
+            case -180: _rotateOffset = new Vector2(_gamePiece.Width, -_gamePiece.Height);
+                break;
+            default:
+                throw new Exception($"rotation z value should be 0, 90, -90, or -180, rotation z value = {transform.rotation.eulerAngles.z}");
+        }
+        return oldOffset;
     }
 }

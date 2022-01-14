@@ -8,17 +8,18 @@ public class PlayerDisplay : MonoBehaviour
 
     [HideInInspector]
     public PieceDisplay pieceDisplay = null;
+    public BoardDisplay boardDisplay;
 
     private void Awake()
     {
-        BoardDisplay boardDisplay = Instantiate(boardDisplayPrefab, transform).GetComponent<BoardDisplay>();
+        boardDisplay = Instantiate(boardDisplayPrefab, transform).GetComponent<BoardDisplay>();
         boardDisplay.Setup(offset, GameManager.instance.boardSize);
     }
 
     public void SpawnPiece(Player player)
     {
-        pieceDisplay = Instantiate(pieceDisplayPrefab).GetComponent<PieceDisplay>();
-        pieceDisplay.Setup(player.ActiveGamePiece, player.ActivePosition + offset);
+        pieceDisplay = Instantiate(pieceDisplayPrefab, transform).GetComponent<PieceDisplay>();
+        Vector3 spawnPoint = player.ActivePosition + (Vector2)boardDisplay.transform.position;
+        pieceDisplay.Setup(player.ActiveGamePiece, spawnPoint);
     }
-
 }

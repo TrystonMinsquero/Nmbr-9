@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -26,6 +28,20 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        SetupGame();
+        BeginTurn();
+    }
+
+    private void Update()
+    {
+        foreach (Player game in _players)
+            if (game.ActiveGamePiece != null)
+                return;
+        BeginTurn();
+    }
+
+    private void SetupGame()
+    {
         _deck = new Deck(availablePieces);
         _players = new Player[numPlayers];
         _displays = new PlayerDisplay[numPlayers];
@@ -38,15 +54,6 @@ public class GameManager : MonoBehaviour
             // Displays
             _displays[i] = player.GetComponent<PlayerDisplay>();    
         }
-        BeginTurn();
-    }
-
-    private void Update()
-    {
-        foreach (Player game in _players)
-            if (game.ActiveGamePiece != null)
-                return;
-        BeginTurn();
     }
 
     private void BeginTurn()
@@ -68,7 +75,12 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
-        throw new NotImplementedException();
+        for (int i = 0; i < _players.Length; i++)
+        {
+            Debug.Log($"{_displays[i].name}'s total score was {_players[i].CalculateScore()}");
+            Destroy(_displays[i].gameObject);
+        }
+        SetupGame();
     }
     
     

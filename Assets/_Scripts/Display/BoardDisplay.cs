@@ -34,7 +34,6 @@ public class BoardDisplay : MonoBehaviour
     
     public void Hide()
     {
-        
         for (int i = 0; i < _boardSize; i++)
             for (int j = 0; j < _boardSize; j++)
                 _displayBoard[i, j].SetActive(false);
