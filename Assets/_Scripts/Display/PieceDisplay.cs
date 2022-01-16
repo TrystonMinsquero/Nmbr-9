@@ -4,6 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class PieceDisplay : MonoBehaviour
 {
+    public int baseTint = 135;
+    public int tintIncrease = 35;
+    
     private GamePiece _gamePiece;
     private SpriteRenderer _sr;
 
@@ -22,7 +25,17 @@ public class PieceDisplay : MonoBehaviour
         _rotateOffset = Vector3.zero;
         transform.position = spawnPoint + new Vector3(-.5f, -.5f);
     }
-    
+
+    public void Place(int level)
+    {
+        if(level < 0)
+            _sr.color = new Color(255, 255, 255);
+        else
+        {
+            int colorVal = baseTint + level * tintIncrease;
+            _sr.color = new Color(colorVal/255f, colorVal/255f, colorVal/255f);
+        }
+    }
     
     public void Move(Vector2Int direction)
     {

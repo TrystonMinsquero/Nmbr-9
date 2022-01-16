@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -34,10 +32,12 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        foreach (Player game in _players)
-            if (game.ActiveGamePiece != null)
+        foreach (Player player in _players)
+        {
+            if (player.ActiveGamePiece != null)
                 return;
-        BeginTurn();
+        }
+        //BeginTurn();
     }
 
     private void SetupGame()
@@ -51,8 +51,15 @@ public class GameManager : MonoBehaviour
             GameObject player = Instantiate(playerPrefab);
             player.name = "Player " + (i + 1);
             player.GetComponent<PlayerController>().Set(ref _players[i]);
+            // if (i == 0)
+            //     player.transform.position += Vector3.left * ((boardSize / 2) + 3);
+            // if (i == 1)
+            //     player.transform.position += Vector3.right * ((boardSize / 2) + 3);
             // Displays
             _displays[i] = player.GetComponent<PlayerDisplay>();    
+            _displays[i].Setup();
+            
+            _displays[i].gameObject.SetActive(false);
         }
     }
 
@@ -66,11 +73,30 @@ public class GameManager : MonoBehaviour
         }
 
         GamePiece newPiece = newCard.GamePiece(++_turnNumber);
+
+        // for (int i = 0; i < numPlayers; i++)
+        // {
+        //     _players[i].StartTurn(newPiece);
+        //     _displays[i].SpawnPiece(_players[i]);
+        // }
+        
+        StartCoroutine(StartTurnCycle(newPiece));
+    }
+
+    IEnumerator StartTurnCycle(GamePiece gamePiece)
+    {
         for (int i = 0; i < numPlayers; i++)
         {
-            _players[i].StartTurn(newPiece);
+            _displays[i].gameObject.SetActive(true);
+            _players[i].StartTurn(gamePiece);
             _displays[i].SpawnPiece(_players[i]);
+            while (_players[i].ActiveGamePiece != null)
+                yield return null;
+            Debug.Log($"Player {(i + 1)}'s board:");
+            _players[i].DebugDisplay();
+            _displays[i].gameObject.SetActive(false);
         }
+        BeginTurn();
     }
 
     private void EndGame()

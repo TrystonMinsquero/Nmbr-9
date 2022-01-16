@@ -44,5 +44,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 5781868733179232578, guid: 2809e8a80e155c94bb5eaca3cbcc045a, type: 3}
-  boardOffset: {x: 0, y: 0}
-  boardSize: 25

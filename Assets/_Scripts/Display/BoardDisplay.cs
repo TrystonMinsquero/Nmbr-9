@@ -9,6 +9,8 @@ public class BoardDisplay : MonoBehaviour
     private uint _boardSize;
     private GameObject[,] _displayBoard;
     
+    
+    
     // Start is called before the first frame update
     public void Setup(Vector2 offset, uint size)
     {

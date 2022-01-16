@@ -95,3 +95,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f780d4418639e7f44b31abb7aa762e40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseTint: 140

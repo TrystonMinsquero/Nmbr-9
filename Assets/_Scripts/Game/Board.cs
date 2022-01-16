@@ -22,7 +22,7 @@ public class Board
     }
     
 
-    private int GetLevelFromPosition(GamePiece piece, Vector2Int boardPos)
+    public int GetLevelFromPosition(GamePiece piece, Vector2Int boardPos)
     {
         int level = 0;
         while (level < levels.Count)
@@ -37,14 +37,14 @@ public class Board
         return level;
     }
     
-    public bool TryPlacePiece(GamePiece piece, Vector2Int boardPos)
+    public int TryPlacePiece(GamePiece piece, Vector2Int boardPos)
     {
         //do checks
         if (!IsInBounds(piece, boardPos))
         {
             Debug.LogWarning("Piece out of Bounds");
             // DisplayWithPiece(piece, boardPos);
-            return false;
+            return -1;
         }
 
         int level = GetLevelFromPosition(piece, boardPos);
@@ -52,8 +52,8 @@ public class Board
         if (!levels[level].IsConnectedAdjacently(piece, boardPos))
         {
             Debug.LogWarning("Must be adjacent other pieces on this level (level " + level + ")");
-            // DisplayWithPiece(piece, boardPos);
-            return false;
+             DisplayWithPiece(piece, boardPos);
+            return -1;
         }
 
         if (level > 0)
@@ -61,21 +61,21 @@ public class Board
             if (levels[level].IsHanging(piece, boardPos, levels[level - 1]))
             {
                 Debug.LogWarning("Can't place on air squares");
-                // DisplayWithPiece(piece, boardPos);
-                return false;
+                 DisplayWithPiece(piece, boardPos);
+                return -1;
             }
 
             if (!levels[level].IsOnTwoOrMorePieces(piece, boardPos, levels[level - 1]))
             {
                 Debug.LogWarning("Must be placed on two unique pieces");
-                // DisplayWithPiece(piece, boardPos);
-                return false;
+                 DisplayWithPiece(piece, boardPos);
+                return -1;
             }
         }
 
         PlacePiece(piece, boardPos, level);
         // Display();
-        return true;
+        return level;
     }
 
     private void PlacePiece(GamePiece piece, Vector2Int boardPos, int level = -1)
@@ -90,7 +90,7 @@ public class Board
             AddLevel();
         
     }
-    private bool IsInBounds(GamePiece piece, Vector2Int boardPos)
+    public bool IsInBounds(GamePiece piece, Vector2Int boardPos)
     {
         Vector2Int index = GameManager.ConvertToIndex(boardPos);
 

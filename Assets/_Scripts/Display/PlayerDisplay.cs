@@ -1,25 +1,27 @@
+using System;
 using UnityEngine;
 
 public class PlayerDisplay : MonoBehaviour
 {
     public Vector2 offset;
-    public GameObject boardDisplayPrefab;
     public GameObject pieceDisplayPrefab;
 
     [HideInInspector]
-    public PieceDisplay pieceDisplay = null;
+    public PieceDisplay activePieceDisplay = null;
     public BoardDisplay boardDisplay;
 
-    private void Awake()
+    public void Setup()
     {
-        boardDisplay = Instantiate(boardDisplayPrefab, transform).GetComponent<BoardDisplay>();
+        boardDisplay = GetComponentInChildren<BoardDisplay>();
         boardDisplay.Setup(offset, GameManager.instance.boardSize);
+        transform.position = offset;
     }
 
     public void SpawnPiece(Player player)
     {
-        pieceDisplay = Instantiate(pieceDisplayPrefab, transform).GetComponent<PieceDisplay>();
+        activePieceDisplay = Instantiate(pieceDisplayPrefab, transform).GetComponent<PieceDisplay>();
         Vector3 spawnPoint = player.ActivePosition + (Vector2)boardDisplay.transform.position;
-        pieceDisplay.Setup(player.ActiveGamePiece, spawnPoint);
+        activePieceDisplay.Setup(player.ActiveGamePiece, spawnPoint);
     }
+    
 }

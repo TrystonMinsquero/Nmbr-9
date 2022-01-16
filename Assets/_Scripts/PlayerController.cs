@@ -1,58 +1,76 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerDisplay))]
+[RequireComponent(typeof(PlayerDisplay), typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
     private Player _player;
     private PlayerDisplay _display;
+    private PlayerInput _playerInput;
+
+    private Controls _controls;
+
+    private void Awake()
+    {
+        _controls = new Controls();
+        _playerInput = GetComponent<PlayerInput>();
+
+        _controls.Gameplay.Move.started += Move;
+        _controls.Gameplay.PlacePiece.started += Place;
+        _controls.Gameplay.RotateClockwise.started += RotateClockwise;
+        _controls.Gameplay.RotateCounterClockwise.started += RotateCounterClockwise;
+    }
 
     public void Set(ref Player player)
     {
         _player = player;
         _display = GetComponent<PlayerDisplay>();
     }
-    
-    // Update is called once per frame
-    void Update()
+
+    public void Move(InputAction.CallbackContext ctx)
     {
-        if (_player.ActiveGamePiece == null)
-        {
-            _display.pieceDisplay = null;
-            return;
-        }
+        Vector2 input = ctx.ReadValue<Vector2>();
+        Vector2Int moveDir = new Vector2Int((int) input.x, (int) input.y);
+        bool moved = _player.Move(moveDir);
+        // get if passed bounds check
+        if(moved)
+            _display.activePieceDisplay?.Move(moveDir);
+    }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+    public void Place(InputAction.CallbackContext ctx)
+    {
+        int level = _player.Place();
+        if (level >= 0)
         {
-            _player.ActiveGamePiece.RotateCounterClockwise();
-            _display.pieceDisplay.RotateCounterClockwise();
+            _display.activePieceDisplay.Place(level);
+            _display.activePieceDisplay = null;
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            _player.ActiveGamePiece.RotateClockwise();
-            _display.pieceDisplay.RotateClockwise();
-        }
-        
-        Vector2Int moveDir = Vector2Int.zero;
-        if (Input.GetKeyDown(KeyCode.W))
-            moveDir.y += 1;
-        if (Input.GetKeyDown(KeyCode.A))
-            moveDir.x -= 1;
-        if (Input.GetKeyDown(KeyCode.S))
-            moveDir.y -= 1;
-        if (Input.GetKeyDown(KeyCode.D))
-            moveDir.x += 1;
+    public void RotateClockwise(InputAction.CallbackContext ctx)
+    {
+        Debug.Log($"Rotated {name} Clockwise");
+        _player.RotateClockwise();
+        _display.activePieceDisplay.RotateClockwise();
+        _player.DebugDisplayWithActivePiece();
+    }
+    
+    public void RotateCounterClockwise(InputAction.CallbackContext ctx)
+    {
+        Debug.Log($"Rotated {name} Counter Clockwise");
+        _player.RotateCounterClockwise();
+        _display.activePieceDisplay.RotateCounterClockwise();
+        _player.DebugDisplayWithActivePiece();
+    }
 
-        if (moveDir != Vector2Int.zero)
-        {
-            _player.Move(moveDir);
-            _display.pieceDisplay.Move(moveDir);
-        }
+    private void OnEnable()
+    {
+        _controls.Enable();
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _player.Place();
-            
-        }
+    private void OnDisable()
+    {
+        _controls.Disable();
     }
 }

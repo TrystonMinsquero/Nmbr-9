@@ -8,7 +8,6 @@ public class Deck
     public Deck(Card[] availablePieces, uint numOccurences = 2)
     {
         _cards = new List<Card>();
-        int idCounter = 1;
         
         for(int i = 0; i < numOccurences; i++)
             foreach (Card pieceType in availablePieces)
@@ -16,7 +15,6 @@ public class Deck
                 _cards.Add(pieceType);
             }
         _cards.Shuffle();
-
     }
 
     public Card DrawCard()

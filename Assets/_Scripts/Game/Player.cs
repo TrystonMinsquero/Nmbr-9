@@ -17,7 +17,7 @@ public class Player
     
     public void StartTurn(GamePiece piece)
     {
-        ActiveGamePiece = piece;
+        ActiveGamePiece = new GamePiece(piece);
         // Check for piece size
         if (GameManager.instance.boardSize < piece.Height || GameManager.instance.boardSize < piece.Width)
             throw new Exception($"Game board is not big enough for the {piece.Height} by {piece.Width} piece");
@@ -26,27 +26,49 @@ public class Player
         ActivePosition = mid;
     }
 
-    public void Place()
+    // Trys to place the active piece on the board at the active position,
+    // returns the level of the piece place if placed, otherwise returns -1
+    public int Place()
     {
-        if (_board.TryPlacePiece(ActiveGamePiece, ActivePosition))
+        int level = _board.TryPlacePiece(ActiveGamePiece, ActivePosition);
+        
+        if (level >= 0)
         {
             //Debug.Log("Placed " + ActiveGamePiece.Value + " at " + ActivePosition);
             ActiveGamePiece = null;
-        } 
-        // else display message
-        
+            return level;
+        }
+
+        return -1;
+
     }
 
-    public void Move(Vector2Int direction)
+    // moves the active piece on the board in the direction, returns true if moved, false if moving caused out of bounds
+    public bool Move(Vector2Int direction)
     {
         Vector2Int newPosition = ActivePosition + direction;
-        
-        // Bounds check
 
-        ActivePosition = newPosition;
+        if (_board.IsInBounds(ActiveGamePiece, newPosition))
+        {
+            ActivePosition = newPosition;
+            // Debug.Log("Moved " + ActiveGamePiece.Value + " to " + ActivePosition);
+            return true;
+        }
         
-        // Debug.Log("Moved " + ActiveGamePiece.Value + " to " + ActivePosition);
-        
+        // Its out of bounds
+        Debug.LogWarning("Cannot place piece out of bounds");
+        return false;
+
+    }
+
+    public void RotateClockwise()
+    {
+        ActiveGamePiece.RotateClockwise();
+    }
+    
+    public void RotateCounterClockwise()
+    {
+        ActiveGamePiece.RotateCounterClockwise();
     }
 
     public int CalculateScore()
