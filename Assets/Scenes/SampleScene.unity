@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 354840776}
   - component: {fileID: 354840775}
   m_Layer: 0
-  m_Name: Game Manager
+  m_Name: Game
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,9 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f934e655656a49547a61a73be88e69a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPrefab: {fileID: 2622783888689520507, guid: 01af3e7706f8bbc44848cab091c894be, type: 3}
-  boardSize: 20
-  numPlayers: 1
   availablePieces:
   - {fileID: 11400000, guid: 2ac40df8bf5b5ff4c90008c207cfad23, type: 2}
   - {fileID: 11400000, guid: 98512661cd8d30d458c2ff13c6cd7d58, type: 2}
@@ -166,6 +163,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b61dea679bb6404b9d1121dd3dec819, type: 2}
   - {fileID: 11400000, guid: 8256f48fbb80f4c4f8642a36253d575f, type: 2}
   - {fileID: 11400000, guid: f642e6c5b89fb074fb7b3a982f27cce9, type: 2}
+  playerPrefab: {fileID: 2622783888689520507, guid: 01af3e7706f8bbc44848cab091c894be, type: 3}
+  boardSize: 20
+  numPlayers: 1
 --- !u!4 &354840776
 Transform:
   m_ObjectHideFlags: 0
