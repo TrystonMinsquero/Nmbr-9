@@ -58,10 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9e49b54c0caacb4faad6751aa6c3152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: -0.5}
-  boardDisplayPrefab: {fileID: 8921683050697365746, guid: b71995ddc2abcd243a4c1de2de0c892d, type: 3}
+  offset: {x: 0, y: 0.5}
   pieceDisplayPrefab: {fileID: 6668336961671729870, guid: ad4e165a95519f1459110e7febfbf11d, type: 3}
-  pieceDisplay: {fileID: 0}
+  activePieceDisplay: {fileID: 0}
   boardDisplay: {fileID: 0}
 --- !u!114 &4813437735091484834
 MonoBehaviour:

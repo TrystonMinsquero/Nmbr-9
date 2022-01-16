@@ -24,7 +24,7 @@ public class BoardDisplay : MonoBehaviour
                 _displayBoard[i, j].transform.position = new Vector2(i, j);
             }
         
-        transform.position =  new Vector2(-_boardSize/2, -_boardSize/2) + offset;
+        transform.position =  new Vector2(-_boardSize/2, -_boardSize/2);
     }
 
     public void Show()
