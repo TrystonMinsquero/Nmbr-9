@@ -27,6 +27,7 @@ public class GamePiece
     {
         Value = gamePiece.Value;
         Sprite = gamePiece.Sprite;
+        Color = gamePiece.Color;
         PieceMatrix = MatrixHelper.GetMatrixCopy(gamePiece.PieceMatrix);
         Height = gamePiece.Height;
         Width = gamePiece.Width;

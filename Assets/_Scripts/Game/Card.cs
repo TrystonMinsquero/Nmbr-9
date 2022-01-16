@@ -24,12 +24,12 @@ public class Card : ScriptableObject
             for (int y = 0; y < sprite.rect.height; y++)
             {
                 Color pixel = sprite.texture.GetPixel((int)sprite.rect.x + x, (int)sprite.rect.y + y);
-                if (pixel.a != 0)
+                if (pixel.a > 0)
                 {
                     if (colorsFoundCount.ContainsKey(pixel))
                         colorsFoundCount[pixel] += 1;
                     else
-                        colorsFoundCount[pixel] = 1;
+                        colorsFoundCount.Add(pixel, 1);
                 }
             }
         }
