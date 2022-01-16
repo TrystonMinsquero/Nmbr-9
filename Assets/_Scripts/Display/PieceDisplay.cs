@@ -1,65 +1,57 @@
 using System;
+using _Scripts;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
-public class PieceDisplay : MonoBehaviour
+public abstract class PieceDisplay : MonoBehaviour
 {
-    public int baseTint = 135;
-    public int tintIncrease = 35;
-    
-    private GamePiece _gamePiece;
-    private SpriteRenderer _sr;
+    protected GamePiece _gamePiece;
+    protected Vector3 _rotateOffset;
+    protected SpriteRenderer _sr;
 
-    private Vector3 _rotateOffset;
-
-    private void Start()
+    public virtual void Setup(GamePiece piece, Vector3 spawnPoint)
     {
-        _sr = GetComponent<SpriteRenderer>();
-    }
-
-    public void Setup(GamePiece piece, Vector3 spawnPoint)
-    {
-        _sr = GetComponent<SpriteRenderer>();
         _gamePiece = piece;
-        _sr.sprite = piece.Sprite;
         _rotateOffset = Vector3.zero;
         transform.position = spawnPoint + new Vector3(-.5f, -.5f);
+        _sr = GetComponent<SpriteRenderer>();
+        _sr.sprite = piece.Sprite;
     }
 
-    public void Place(int level)
+    public virtual void Place(int level)
     {
-        if(level < 0)
-            _sr.color = new Color(255, 255, 255);
-        else
-        {
-            int colorVal = baseTint + level * tintIncrease;
-            _sr.color = new Color(colorVal/255f, colorVal/255f, colorVal/255f);
-        }
-    }
-    
-    public void Move(Vector2Int direction)
-    {
-        transform.position += new Vector3(direction.x, direction.y);
+        UpdateLevel(level);
     }
 
-    public void RotateClockwise()
+    public void Move(Vector3Int direction, int level)
+    {
+        transform.position += new Vector3(direction.x, direction.y, direction.z);
+        UpdateLevel(level);
+    }
+
+    public void RotateClockwise(int level)
     {
         transform.eulerAngles -= Vector3.forward * 90;
         
         // Reset positional offset
         transform.position -= SetRotateOffset();
         transform.position += _rotateOffset;
+        
+        UpdateLevel(level);
     }
     
-    public void RotateCounterClockwise()
+    public void RotateCounterClockwise(int level)
     {
         transform.eulerAngles += Vector3.forward * 90;
         
         // Reset positional offset
         transform.position -= SetRotateOffset();
         transform.position += _rotateOffset;
+
+        UpdateLevel(level);
     }
 
+    protected abstract void UpdateLevel(int level);
+    
     // Sets _offset to the correct Vector2, but returns the old offset
     private Vector3 SetRotateOffset()
     {

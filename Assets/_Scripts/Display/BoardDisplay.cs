@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardDisplay : MonoBehaviour
+public abstract class BoardDisplay : MonoBehaviour
 {
     public GameObject tilePrefab;
     
     private uint _boardSize;
     private GameObject[,] _displayBoard;
     
-    
-    
     // Start is called before the first frame update
-    public void Setup(Vector2 offset, uint size)
+    public void Setup(uint size)
     {
         _boardSize = size;
         _displayBoard = new GameObject[_boardSize, _boardSize];

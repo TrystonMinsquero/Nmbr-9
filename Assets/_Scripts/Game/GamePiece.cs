@@ -1,11 +1,12 @@
-using System;
 using UnityEngine;
 
+[System.Serializable]
 public class GamePiece
 {
     public uint Width { get; private set; }
     public uint Height { get; private set;}
     public Sprite Sprite { get; }
+    public Color Color { get; }
     public int Value { get; }
     public int ID { get; }
     public bool[,] PieceMatrix { get; private set;}
@@ -15,6 +16,7 @@ public class GamePiece
     {
         Value = gamePieceType.value;
         Sprite = gamePieceType.sprite;
+        Color = gamePieceType.GetDominantColor();
         PieceMatrix = gamePieceType.ConstructMatrix();
         Height = (uint)PieceMatrix.GetLength(0);
         Width = (uint)PieceMatrix.GetLength(1);

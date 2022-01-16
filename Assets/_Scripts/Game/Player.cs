@@ -43,8 +43,9 @@ public class Player
 
     }
 
-    // moves the active piece on the board in the direction, returns true if moved, false if moving caused out of bounds
-    public bool Move(Vector2Int direction)
+    // moves the active piece on the board in the direction, returns the level of the piece if moved,
+    // otherwise -1 if there is piece would be out of bounds
+    public int Move(Vector2Int direction)
     {
         Vector2Int newPosition = ActivePosition + direction;
 
@@ -52,23 +53,27 @@ public class Player
         {
             ActivePosition = newPosition;
             // Debug.Log("Moved " + ActiveGamePiece.Value + " to " + ActivePosition);
-            return true;
+            return _board.GetLevelFromPosition(ActiveGamePiece, ActivePosition);;
         }
         
         // Its out of bounds
         Debug.LogWarning("Cannot place piece out of bounds");
-        return false;
+        return -1;
 
-    }
-
-    public void RotateClockwise()
-    {
-        ActiveGamePiece.RotateClockwise();
     }
     
-    public void RotateCounterClockwise()
+    // rotates the activePiece clockwise, returning what the new level it would be placed
+    public int RotateClockwise()
+    {
+        ActiveGamePiece.RotateClockwise();
+        return GetCurrentLevel();
+    }
+    
+    // rotates the activePiece counter clockwise, returning what the new level it would be placed
+    public int RotateCounterClockwise()
     {
         ActiveGamePiece.RotateCounterClockwise();
+        return GetCurrentLevel();
     }
 
     public int CalculateScore()
@@ -77,6 +82,11 @@ public class Player
         for (int i = 0; i < _board.levels.Count; i++)
             total += _board.levels[i].GetTotalScore() * i;
         return total;
+    }
+
+    public int GetCurrentLevel()
+    {
+        return _board.GetLevelFromPosition(ActiveGamePiece, ActivePosition);
     }
 
     public void DebugDisplay()

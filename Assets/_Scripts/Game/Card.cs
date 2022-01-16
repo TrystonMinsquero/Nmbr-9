@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -11,6 +14,46 @@ public class Card : ScriptableObject
     {
         return new GamePiece(this, id);
     }
+
+    public Color GetDominantColor()
+    {
+        Dictionary<Color, int> colorsFoundCount = new Dictionary<Color, int>();
+        
+        for (int x = 0; x < sprite.rect.width; x++)
+        {
+            for (int y = 0; y < sprite.rect.height; y++)
+            {
+                Color pixel = sprite.texture.GetPixel((int)sprite.rect.x + x, (int)sprite.rect.y + y);
+                if (pixel.a != 0)
+                {
+                    if (colorsFoundCount.ContainsKey(pixel))
+                        colorsFoundCount[pixel] += 1;
+                    else
+                        colorsFoundCount[pixel] = 1;
+                }
+            }
+        }
+        
+        // if the sprite is completely transparent, return transparent black
+        if(colorsFoundCount.Count <= 0)
+            return new Color(0,0,0,0);
+        
+        // set dominant color as an arbitrary color, I know it's inefficient by one step. If it bothers you, fix it
+        Color dominantColor = colorsFoundCount.Keys.ToList()[0];
+        int highestCount = colorsFoundCount[dominantColor];
+
+        foreach (var color in colorsFoundCount.Keys)
+        {
+            if (colorsFoundCount[color] > highestCount)
+            {
+                dominantColor = color;
+                highestCount = colorsFoundCount[color];
+            }
+        }
+
+        return dominantColor;
+    }
+    
     public bool[,] ConstructMatrix()
     {
         uint imageWidth = (uint)sprite.rect.width;

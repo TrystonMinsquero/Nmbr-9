@@ -7,14 +7,12 @@ public class PlayerController : MonoBehaviour
 {
     private Player _player;
     private PlayerDisplay _display;
-    private PlayerInput _playerInput;
 
     private Controls _controls;
 
     private void Awake()
     {
         _controls = new Controls();
-        _playerInput = GetComponent<PlayerInput>();
 
         _controls.Gameplay.Move.started += Move;
         _controls.Gameplay.PlacePiece.started += Place;
@@ -32,10 +30,10 @@ public class PlayerController : MonoBehaviour
     {
         Vector2 input = ctx.ReadValue<Vector2>();
         Vector2Int moveDir = new Vector2Int((int) input.x, (int) input.y);
-        bool moved = _player.Move(moveDir);
+        int level = _player.Move(moveDir);
         // get if passed bounds check
-        if(moved)
-            _display.activePieceDisplay?.Move(moveDir);
+        if(level >= 0)
+            _display.MovePiece(new Vector3Int(moveDir.x, moveDir.y, 0), level);
     }
 
     public void Place(InputAction.CallbackContext ctx)
@@ -43,25 +41,20 @@ public class PlayerController : MonoBehaviour
         int level = _player.Place();
         if (level >= 0)
         {
-            _display.activePieceDisplay.Place(level);
-            _display.activePieceDisplay = null;
+            _display.PlacePiece(level);
         }
     }
 
     public void RotateClockwise(InputAction.CallbackContext ctx)
     {
         Debug.Log($"Rotated {name} Clockwise");
-        _player.RotateClockwise();
-        _display.activePieceDisplay.RotateClockwise();
-        _player.DebugDisplayWithActivePiece();
+        _display.RotatePieceClockwise(_player.RotateClockwise());
     }
     
     public void RotateCounterClockwise(InputAction.CallbackContext ctx)
     {
         Debug.Log($"Rotated {name} Counter Clockwise");
-        _player.RotateCounterClockwise();
-        _display.activePieceDisplay.RotateCounterClockwise();
-        _player.DebugDisplayWithActivePiece();
+        _display.RotatePieceCounterClockwise(_player.RotateCounterClockwise());
     }
 
     private void OnEnable()

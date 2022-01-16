@@ -72,6 +72,7 @@ public class Game : MonoBehaviour
         for (int i = 0; i < numPlayers; i++)
         {
             // Start of player i's turn
+            
             _displays[i].gameObject.SetActive(true);
             _players[i].StartTurn(gamePiece);
             _displays[i].SpawnPiece(_players[i]);
@@ -79,8 +80,10 @@ public class Game : MonoBehaviour
                 yield return null;
             
             // End of player i's Turn
-            Debug.Log($"Player {(i + 1)}'s board:");
-            _players[i].DebugDisplay();
+            
+            // Debug.Log($"Player {(i + 1)}'s board:");
+            // _players[i].DebugDisplay();
+            
             _displays[i].gameObject.SetActive(false);
         }
         BeginTurn();
