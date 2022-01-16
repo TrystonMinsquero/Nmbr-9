@@ -10,10 +10,10 @@ public class PlayerDisplay : MonoBehaviour
     public PieceDisplay activePieceDisplay = null;
     public BoardDisplay boardDisplay;
 
-    public void Setup()
+    public void Setup(uint boardSize)
     {
         boardDisplay = GetComponentInChildren<BoardDisplay>();
-        boardDisplay.Setup(offset, GameManager.instance.boardSize);
+        boardDisplay.Setup(offset, boardSize);
         transform.position = offset;
     }
 

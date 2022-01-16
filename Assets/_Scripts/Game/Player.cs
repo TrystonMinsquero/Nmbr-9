@@ -19,9 +19,9 @@ public class Player
     {
         ActiveGamePiece = new GamePiece(piece);
         // Check for piece size
-        if (GameManager.instance.boardSize < piece.Height || GameManager.instance.boardSize < piece.Width)
+        if (_board.size < piece.Height || _board.size < piece.Width)
             throw new Exception($"Game board is not big enough for the {piece.Height} by {piece.Width} piece");
-        Vector2Int mid = Vector2Int.one * (int) (GameManager.instance.boardSize/ 2);
+        Vector2Int mid = Vector2Int.one * (int) (_board.size/ 2);
         Vector2Int offset = new Vector2Int(-Mathf.CeilToInt(ActiveGamePiece.Width/ 2f), Mathf.CeilToInt(ActiveGamePiece.Height / 2f));
         ActivePosition = mid;
     }

@@ -2,27 +2,17 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class Game : MonoBehaviour
 {
-    public static GameManager instance;
-    
-    public GameObject playerPrefab;
-    public uint boardSize;
-    public uint numPlayers;
-    
+    [SerializeField] private Card[] availablePieces;
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private uint boardSize;
+    [SerializeField] private uint numPlayers;
+
     private Player[] _players;
     private PlayerDisplay[] _displays;
-    public Card[] availablePieces;
     private Deck _deck;
     private int _turnNumber;
-
-    private void Awake()
-    {
-        if (instance)
-            Destroy(this.gameObject);
-        else
-            instance = this;
-    }
 
     private void Start()
     {
@@ -57,7 +47,7 @@ public class GameManager : MonoBehaviour
             //     player.transform.position += Vector3.right * ((boardSize / 2) + 3);
             // Displays
             _displays[i] = player.GetComponent<PlayerDisplay>();    
-            _displays[i].Setup();
+            _displays[i].Setup(boardSize);
             
             _displays[i].gameObject.SetActive(false);
         }
@@ -74,12 +64,6 @@ public class GameManager : MonoBehaviour
 
         GamePiece newPiece = newCard.GamePiece(++_turnNumber);
 
-        // for (int i = 0; i < numPlayers; i++)
-        // {
-        //     _players[i].StartTurn(newPiece);
-        //     _displays[i].SpawnPiece(_players[i]);
-        // }
-        
         StartCoroutine(StartTurnCycle(newPiece));
     }
 
@@ -87,11 +71,14 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < numPlayers; i++)
         {
+            // Start of player i's turn
             _displays[i].gameObject.SetActive(true);
             _players[i].StartTurn(gamePiece);
             _displays[i].SpawnPiece(_players[i]);
             while (_players[i].ActiveGamePiece != null)
                 yield return null;
+            
+            // End of player i's Turn
             Debug.Log($"Player {(i + 1)}'s board:");
             _players[i].DebugDisplay();
             _displays[i].gameObject.SetActive(false);
@@ -106,25 +93,8 @@ public class GameManager : MonoBehaviour
             Debug.Log($"{_displays[i].name}'s total score was {_players[i].CalculateScore()}");
             Destroy(_displays[i].gameObject);
         }
-        SetupGame();
+        Start();
     }
     
-    
-    public static Vector2Int ConvertToIndex(Vector2Int boardPos)
-    {
-        Vector2Int index = new Vector2Int();
-        index.x = (int)GameManager.instance.boardSize - boardPos.y;
-        index.y = boardPos.x;
 
-        return index;
-    }
-    
-    public static Vector2Int ConvertToPosition(Vector2Int index)
-    {
-        Vector2Int position = new Vector2Int();
-        position.x = (int)GameManager.instance.boardSize - index.y;
-        position.y = index.x;
-
-        return index;
-    }
 }

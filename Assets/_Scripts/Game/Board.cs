@@ -92,7 +92,7 @@ public class Board
     }
     public bool IsInBounds(GamePiece piece, Vector2Int boardPos)
     {
-        Vector2Int index = GameManager.ConvertToIndex(boardPos);
+        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, (int)size);
 
         if (index.x < 0 || index.y < 0)
             return false;
@@ -126,6 +126,4 @@ public class Board
         Debug.Log("Board with " + gamePiece + " place at " + boardPos + ":");
         tempBoard.Display();
     }
-
-
 }

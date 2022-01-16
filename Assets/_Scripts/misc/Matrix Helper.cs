@@ -1,4 +1,4 @@
-using System;
+using UnityEngine;
 
 public static class MatrixHelper
 {
@@ -57,4 +57,22 @@ public static class MatrixHelper
         return newMat;
     }
     
+    public static Vector2Int ConvertToIndex(Vector2Int boardPos, int boardSize)
+    {
+        Vector2Int index = new Vector2Int();
+        index.x = boardSize - boardPos.y;
+        index.y = boardPos.x;
+
+        return index;
+    }
+    
+    public static Vector2Int ConvertToPosition(Vector2Int index, int boardSize)
+    {
+        Vector2Int position = new Vector2Int();
+        position.x = boardSize - index.y;
+        position.y = index.x;
+
+        return index;
+    }
+
 }
