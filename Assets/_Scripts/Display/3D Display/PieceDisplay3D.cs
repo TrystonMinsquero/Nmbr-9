@@ -12,7 +12,7 @@ public class PieceDisplay3D : PieceDisplay
     {
         base.Setup(piece, spawnPoint);
         _pieceDepth = pieceTilePrefab.transform.localScale.z;
-        transform.SetZ(transform.position.z - _pieceDepth);
+        UpdateLevel((int)spawnPoint.z);
         Construct3DTiles();
     }
 

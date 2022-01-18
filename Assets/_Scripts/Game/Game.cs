@@ -41,13 +41,9 @@ public class Game : MonoBehaviour
             GameObject player = Instantiate(playerPrefab);
             player.name = "Player " + (i + 1);
             player.GetComponent<PlayerController>().Set(ref _players[i]);
-            // if (i == 0)
-            //     player.transform.position += Vector3.left * ((boardSize / 2) + 3);
-            // if (i == 1)
-            //     player.transform.position += Vector3.right * ((boardSize / 2) + 3);
             // Displays
             _displays[i] = player.GetComponent<PlayerDisplay>();    
-            _displays[i].Setup(boardSize);
+            _displays[i].Setup(ref _players[i]);
             
             _displays[i].gameObject.SetActive(false);
         }

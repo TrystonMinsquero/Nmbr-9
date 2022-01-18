@@ -26,7 +26,7 @@ public class Level
     
     public void PlacePiece(GamePiece piece, Vector2Int boardPos)
     {
-        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, (int)_size);
+        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, _size);
         //Debug.Log("Placing down:\n "+ piece.GetMatrixString());
         // update all relevant positions
         for (int i = 0; i < piece.Height; i++)
@@ -60,7 +60,7 @@ public class Level
     public bool HasOccupiedSpace(GamePiece piece, Vector2Int boardPos)
     {
         
-        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, (int)_size);
+        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, _size);
         
         // checks all indexes a piece covers
         for (int i = 0; i < piece.Height; i++)
@@ -72,7 +72,7 @@ public class Level
     
     private bool HasFreeSpace(GamePiece piece, Vector2Int boardPos)
     {        
-        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, (int)_size);
+        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, _size);
 
         // update all relevant positions
         for (int i = 0; i < piece.Height; i++)
@@ -105,7 +105,7 @@ public class Level
         if (_piecesPlaced.Count == 0)
             return true;
                 
-        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, (int)_size);
+        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, _size);
 
         //Check for all relevant positions for any occupied adjacent spaces
         for (int i = 0; i < piece.Height; i++)
@@ -133,7 +133,7 @@ public class Level
         if (lowerLevel.HasFreeSpace(piece, boardPos))
             return false;
                 
-        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, (int)_size);
+        Vector2Int index = MatrixHelper.ConvertToIndex(boardPos, _size);
 
         HashSet<int> idsFound = new HashSet<int>();
         // update all relevant positions

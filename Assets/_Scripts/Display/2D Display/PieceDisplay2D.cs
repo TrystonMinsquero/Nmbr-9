@@ -13,6 +13,7 @@ public class PieceDisplay2D : PieceDisplay
         base.Setup(piece, spawnPoint);
         _sr = GetComponent<SpriteRenderer>();
         _sr.sprite = piece.Sprite;
+        UpdateLevel((int)spawnPoint.z);
     }
     
     protected override void UpdateLevel(int level)

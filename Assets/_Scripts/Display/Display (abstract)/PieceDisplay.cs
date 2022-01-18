@@ -15,6 +15,7 @@ public abstract class PieceDisplay : MonoBehaviour
         transform.position = spawnPoint + new Vector3(-.5f, -.5f);
         _sr = GetComponent<SpriteRenderer>();
         _sr.sprite = piece.Sprite;
+        UpdateLevel((int)spawnPoint.z);
     }
 
     public virtual void Place(int level)
@@ -22,9 +23,9 @@ public abstract class PieceDisplay : MonoBehaviour
         UpdateLevel(level);
     }
 
-    public void Move(Vector3Int direction, int level)
+    public void Move(Vector2Int direction, int level)
     {
-        transform.position += new Vector3(direction.x, direction.y, direction.z);
+        transform.position += new Vector3(direction.x, direction.y);
         UpdateLevel(level);
     }
 

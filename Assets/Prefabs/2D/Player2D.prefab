@@ -43,7 +43,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2622783888689520507}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 950124b38df7aeb45923023f920401a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 808153b114985ba4f91663d0b2414eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2622783888689512581
@@ -60,8 +60,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offset: {x: 0, y: 0.5}
   pieceDisplayPrefab: {fileID: 6668336961671729870, guid: ad4e165a95519f1459110e7febfbf11d, type: 3}
-  activePieceDisplay: {fileID: 0}
-  boardDisplay: {fileID: 0}
 --- !u!114 &4813437735091484834
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,8 +6,6 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     private Player _player;
-    private PlayerDisplay _display;
-
     private Controls _controls;
 
     private void Awake()
@@ -23,38 +21,33 @@ public class PlayerController : MonoBehaviour
     public void Set(ref Player player)
     {
         _player = player;
-        _display = GetComponent<PlayerDisplay>();
     }
 
     public void Move(InputAction.CallbackContext ctx)
     {
         Vector2 input = ctx.ReadValue<Vector2>();
         Vector2Int moveDir = new Vector2Int((int) input.x, (int) input.y);
-        int level = _player.Move(moveDir);
-        // get if passed bounds check
-        if(level >= 0)
-            _display.MovePiece(new Vector3Int(moveDir.x, moveDir.y, 0), level);
+        _player.Move(moveDir);
+
     }
 
     public void Place(InputAction.CallbackContext ctx)
     {
-        int level = _player.Place();
-        if (level >= 0)
-        {
-            _display.PlacePiece(level);
-        }
+        _player.Place();
     }
 
     public void RotateClockwise(InputAction.CallbackContext ctx)
     {
-        Debug.Log($"Rotated {name} Clockwise");
-        _display.RotatePieceClockwise(_player.RotateClockwise());
+        //Debug.Log($"Rotated {name} Clockwise");
+        
+        _player.RotateClockwise();
     }
     
     public void RotateCounterClockwise(InputAction.CallbackContext ctx)
     {
-        Debug.Log($"Rotated {name} Counter Clockwise");
-        _display.RotatePieceCounterClockwise(_player.RotateCounterClockwise());
+        //Debug.Log($"Rotated {name} Counter Clockwise");
+        
+        _player.RotateCounterClockwise();
     }
 
     private void OnEnable()
